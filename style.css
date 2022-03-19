@@ -1,0 +1,403 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap");
+
+:root {
+  --color: var(--lightBlue);
+  --colorHover: var(--lightGreen);
+  --lightBlue: #5d8bf4;
+  --lightGreen: #89f060;
+  --lightYellow: #eaf45d;
+  --lightPink: #f45df4;
+}
+
+* {
+  font-family: "Poppins", sans-serif;
+}
+
+html {
+}
+
+body {
+}
+
+header {
+}
+
+.title {
+  position: relative;
+  background-color: var(--lightBlue);
+  text-align: center;
+}
+h1 {
+  color: white;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+.completed {
+  opacity: 0.5;
+  transition: all 0.5s ease;
+  transform: translate(0.2rem);
+}
+
+.completed::after {
+  transition: all 0.5s ease;
+  content: "";
+  position: absolute;
+  top: 10px;
+  height: 2px;
+  width: 0;
+  background-color: #5d8bf4;
+  animation: grow 0.5s ease-in-out forwards;
+}
+
+@keyframes grow {
+  0% {
+    width: 0px;
+  }
+  100% {
+    width: 170px;
+  }
+}
+
+i {
+  pointer-events: none;
+}
+
+.grid {
+  height: 100%;
+  width: 100%;
+  display: inline-grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.todoCard {
+  position: relative;
+  box-shadow: 8px 16px 16px hsl(0deg 0% 0% / 0.25);
+  min-height: 350px;
+  border-radius: 30px;
+  width: 250px;
+  padding: 1rem;
+  padding-bottom: 2rem;
+  animation: slide 1.5s ease forwards, born 1.5s ease forwards;
+  overflow: hidden;
+}
+
+@keyframes slide {
+  to {
+    transform: translateX(10%);
+  }
+}
+
+.cardHeader {
+  position: relative;
+  background-color: var(--color);
+  text-align: center;
+  margin: -20px;
+  height: 100px;
+  margin-top: -35px;
+  border-radius: 8px;
+  width: 290px;
+  transition: all 0.5s ease;
+}
+
+.btnColors {
+  position: absolute;
+  outline: none;
+  border-style: none;
+  background-color: #5d8bf4;
+  width: 30px;
+  height: 30px;
+  right: 0px;
+  top: 15px;
+  border-radius: 100%;
+  border: 2px solid white;
+  cursor: pointer;
+  transition: all 0.5s ease;
+}
+
+.divColors {
+  display: none;
+  position: absolute;
+
+  right: 10px;
+  top: 15px;
+  padding: 0px 16px 12px 16px;
+  width: 30px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  transition: all 0.5s ease;
+  border-radius: 8px;
+}
+
+.divColorsBg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  right: 0px;
+  opacity: 0;
+  z-index: -1;
+  background-color: #f1f1f1;
+}
+
+.btnColorBlue,
+.btnColorGreen,
+.btnColorYellow,
+.btnColorPink {
+  display: block;
+  background-color: #5d8bf4;
+  width: 30px;
+  height: 30px;
+  margin-left: 0px;
+  border-radius: 100%;
+  cursor: pointer;
+  margin-top: 12px;
+  border: 2px solid white;
+  transition: all 0.5s ease;
+  transform: translateX(22%);
+}
+
+.btnColorBlue {
+  background-color: var(--lightBlue);
+  box-shadow: 1px 1px 12px 0.5px var(--lightBlue);
+  opacity: 0;
+  animation: blueShow 0.5s ease forwards;
+}
+
+.btnColorGreen {
+  background-color: var(--lightGreen);
+  box-shadow: 1px 1px 12px 0.5px var(--lightGreen);
+  opacity: 0;
+  animation: greenShow 0.5s ease forwards 0.125s;
+}
+
+.btnColorYellow {
+  background-color: var(--lightYellow);
+  box-shadow: 1px 1px 12px 0.5px var(--lightYellow);
+  opacity: 0;
+  animation: yellowShow 0.5s ease forwards 0.25s;
+}
+
+.btnColorPink {
+  background-color: var(--lightPink);
+  box-shadow: 1px 1px 12px 0.5px var(--lightPink);
+  opacity: 0;
+  animation: pinkShow 0.5s ease forwards 0.375s;
+}
+
+.btnColorBlue:hover,
+.btnColorGreen:hover,
+.btnColorYellow:hover,
+.btnColorPink:hover {
+  transform: translateX(-5%);
+}
+
+.btnColors:hover .divColors {
+  display: block;
+}
+
+@keyframes blueShow {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes greenShow {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes yellowShow {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes pinkShow {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.cardTitleInput {
+  margin-top: 40px;
+  font-size: large;
+  font-weight: bold;
+  color: white;
+  background-color: transparent;
+  border: none;
+  text-align: center;
+  font-size: 25px;
+  width: 75%;
+  margin-left: 0px;
+}
+
+.cardTitleInput:focus {
+  border: none;
+  outline: none;
+}
+
+.todoNewCard {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  background-color: rgba(51, 51, 51, 0.089);
+  min-height: 350px;
+  border-radius: 30px;
+  width: 250px;
+  padding: 1rem;
+  padding-bottom: 2rem;
+  animation: pulse 1s ease infinite alternate;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.todoContainer {
+  transition: all 0.5s ease;
+}
+
+li {
+  margin: auto;
+  margin-bottom: 10px;
+  flex: 1;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.todoDiv {
+  display: flex;
+  justify-content: space-between;
+  transition: all 0.5s ease;
+}
+
+.btnCheck,
+.btnTrash {
+  height: 30px;
+  border-style: none;
+  border: 0.1px solid #333;
+  border-radius: 30px;
+  margin: 2px;
+  width: 30px;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.5s ease;
+}
+
+.btnTrash:hover {
+  background-color: #333;
+  color: white;
+}
+
+.btnCheck:hover {
+  background-color: #333;
+  color: white;
+}
+
+.btnSubmit {
+  border-radius: 30px;
+  width: 25px;
+  height: 25px;
+  border-style: none;
+  background: var(--color);
+  color: white;
+  cursor: pointer;
+  transition: all 0.5s ease;
+}
+
+.btnSubmit:hover {
+  background-color: var(--lightBlue);
+}
+
+.userInput {
+  width: 85%;
+}
+
+form {
+  position: absolute;
+  bottom: 25px;
+  width: 250px;
+}
+
+/* animations */
+
+.fall {
+  transform: translateX(4rem) rotateZ(0deg);
+  opacity: 0%;
+}
+
+footer {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  bottom: 0;
+  left: 0;
+  height: 25px;
+  width: 100%;
+  background-color: #333;
+}
+#btn-addCard {
+  position: absolute;
+  background-color: rgba(31, 53, 112, 0.459);
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 100%;
+  border-style: none;
+  cursor: pointer;
+}
+
+.lightBlue {
+}
+#btn-addCard:hover {
+  background-color: rgb(42, 116, 201);
+}
+
+.move {
+  animation: moveRight 1.5s ease forwards;
+}
+
+@keyframes moveRight {
+  0% {
+    transform: translateX(calc(-250px - 1.5rem));
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0%);
+  }
+}
+
+.born {
+}
+
+@keyframes born {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.hide {
+  display: none;
+}
