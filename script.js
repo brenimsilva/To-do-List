@@ -1,4 +1,3 @@
-console.log("Hello World :)");
 const grid = document.querySelector(".grid");
 const todoNewCard = document.querySelector(".todoNewCard");
 let cardsObj = [];
@@ -146,9 +145,6 @@ const lightGreen = "var(--lightGreen)";
 const lightBlue = "var(--lightBlue)";
 const lightPink = "var(--lightPink)";
 const lightYellow = "var(--lightYellow)";
-// const cardz = new Card();
-// cardz.cardHeader.style.setProperty("background-color", lightBlue);
-// cardz.cardInputBtn.style.setProperty("background-color", lightBlue);
 
 // EVENT LISTENERS
 
