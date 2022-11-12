@@ -107,12 +107,11 @@ i {
   background-color: #5d8bf4;
   width: 30px;
   height: 30px;
-  right: 0px;
+  right: 1px;
   top: 15px;
   border-radius: 100%;
   border: 2px solid white;
   cursor: pointer;
-  transition: all 0.5s ease;
 }
 
 .divColors {
@@ -400,4 +399,11 @@ footer {
 
 .hide {
   display: none;
+}
+
+.color_input {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  background-color: black;
 }
