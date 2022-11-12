@@ -1,8 +1,9 @@
+import Modal from "./Modal.js";
 import Task from "./Task.js";
 import Util from "./Util.js";
 export default class Card {
     constructor() {
-        this.tasks = [];
+        this.taskList = [];
         this.id = Util.generateID("C");
         // CONTAINERS
         this.cardDiv = document.createElement("div");
@@ -31,6 +32,7 @@ export default class Card {
         this.cardTitle = document.createElement("input");
         this.cardTitle.classList.add("cardTitleInput");
         this.cardTitle.setAttribute("type", "text");
+        this.cardTitle.placeholder = "Insert Title";
         // UL
         this.cardUl = document.createElement("ul");
         this.cardUl.classList.add("todoList");
@@ -60,23 +62,53 @@ export default class Card {
         this.build();
     }
     addTask() {
-        try {
-            const task = new Task();
-            task.getElement().innerText = this.cardInputText.value;
-            this.tasks.push(task);
-            for (let index = 0; index < this.tasks.length; index++) {
-                this.cardUl.appendChild(this.tasks[index].getDiv());
+        if (this.checkIfCanAddNewTask()) {
+            try {
+                const task = new Task();
+                task.getButton("trash").addEventListener("click", () => {
+                    this.removeTask(task);
+                });
+                task.getButton("EDIT").addEventListener("click", () => {
+                    this.showEditTaskModal(task);
+                });
+                task.getElement().innerText = this.cardInputText.value;
+                this.taskList.push(task);
+                this.printAllTasks();
+                this.cardInputText.value = "";
+                return true;
             }
-            this.cardInputText.value = "";
-            return true;
+            catch (_a) {
+                console.log("error");
+                return false;
+            }
         }
-        catch (_a) {
-            console.log("error");
+        else {
             return false;
         }
     }
     removeTask(task) {
         try {
+            this.taskList = this.taskList.filter((element) => {
+                return element.id !== task.id;
+            });
+            this.printAllTasks();
+            return true;
+        }
+        catch (_a) {
+            return false;
+        }
+    }
+    showEditTaskModal(task) {
+        try {
+            const modal = new Modal(task.getElement().innerText);
+            document.body.appendChild(modal.container);
+            modal.btnEdit.addEventListener("click", () => {
+                const itemBeingEditedIndex = this.taskList.findIndex((element) => {
+                    return element.id === task.id;
+                });
+                this.taskList[itemBeingEditedIndex].setLiText(modal.htmlTitle.value);
+            });
+            this.printAllTasks();
             return true;
         }
         catch (_a) {
@@ -93,6 +125,23 @@ export default class Card {
         catch (_c) {
             console.log("Card hasnt been builded");
             return false;
+        }
+    }
+    checkIfCanAddNewTask() {
+        if (!this.cardInputText.value) {
+            return false;
+        }
+        else if (this.taskList.length > 5) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    printAllTasks() {
+        this.cardUl.innerHTML = "";
+        for (let index = 0; index < this.taskList.length; index++) {
+            this.cardUl.appendChild(this.taskList[index].getDiv());
         }
     }
 }

@@ -1,3 +1,1 @@
-export default interface Itask {
-  editTaks(): boolean;
-}
+export default interface Itask {}

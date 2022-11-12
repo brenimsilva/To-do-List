@@ -1,10 +1,11 @@
 import ICard from "../interfaces/ICard";
+import Modal from "./Modal.js";
 import Task from "./Task.js";
 import Util from "./Util.js";
 
 export default class Card implements ICard {
   private id: string;
-  private tasks: Array<Task> = [];
+  private taskList: Array<Task> = [];
   private cardDiv: HTMLDivElement;
   private containerDiv: HTMLDivElement;
   private cardHeader: HTMLDivElement;
@@ -46,6 +47,7 @@ export default class Card implements ICard {
     this.cardTitle = document.createElement("input");
     this.cardTitle.classList.add("cardTitleInput");
     this.cardTitle.setAttribute("type", "text");
+    this.cardTitle.placeholder = "Insert Title";
 
     // UL
     this.cardUl = document.createElement("ul");
@@ -83,23 +85,57 @@ export default class Card implements ICard {
   }
 
   public addTask(): boolean {
-    try {
-      const task = new Task();
-      task.getElement().innerText = this.cardInputText.value;
-      this.tasks.push(task);
-      for (let index = 0; index < this.tasks.length; index++) {
-        this.cardUl.appendChild(this.tasks[index].getDiv());
+    if (this.checkIfCanAddNewTask()) {
+      try {
+        const task = new Task();
+
+        task.getButton("trash").addEventListener("click", () => {
+          this.removeTask(task);
+        });
+
+        task.getButton("EDIT").addEventListener("click", () => {
+          this.showEditTaskModal(task);
+        });
+
+        task.getElement().innerText = this.cardInputText.value;
+        this.taskList.push(task);
+        this.printAllTasks();
+        this.cardInputText.value = "";
+
+        return true;
+      } catch {
+        console.log("error");
+        return false;
       }
-      this.cardInputText.value = "";
-      return true;
-    } catch {
-      console.log("error");
+    } else {
       return false;
     }
   }
 
   removeTask(task: Task): boolean {
     try {
+      this.taskList = this.taskList.filter((element) => {
+        return element.id !== task.id;
+      });
+      this.printAllTasks();
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  showEditTaskModal(task: Task): boolean {
+    try {
+      const modal = new Modal(task.getElement().innerText);
+      document.body.appendChild(modal.container);
+      modal.btnEdit.addEventListener("click", () => {
+        const itemBeingEditedIndex = this.taskList.findIndex((element) => {
+          return element.id === task.id;
+        });
+        this.taskList[itemBeingEditedIndex].setLiText(modal.htmlTitle.value);
+      });
+
+      this.printAllTasks();
       return true;
     } catch {
       return false;
@@ -114,6 +150,23 @@ export default class Card implements ICard {
     } catch {
       console.log("Card hasnt been builded");
       return false;
+    }
+  }
+
+  private checkIfCanAddNewTask(): boolean {
+    if (!this.cardInputText.value) {
+      return false;
+    } else if (this.taskList.length > 5) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  private printAllTasks() {
+    this.cardUl.innerHTML = "";
+    for (let index = 0; index < this.taskList.length; index++) {
+      this.cardUl.appendChild(this.taskList[index].getDiv());
     }
   }
 }

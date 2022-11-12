@@ -237,6 +237,10 @@ i {
   outline: none;
 }
 
+.cardTitleInput::placeholder {
+  color: rgba(255, 255, 255, 0.726);
+}
+
 .todoNewCard {
   position: relative;
   display: flex;
@@ -406,4 +410,11 @@ footer {
   width: 30px;
   height: 30px;
   background-color: black;
+}
+
+.modal_container {
+  position: absolute;
+  background-color: #5d8bf4;
+  height: 300px;
+  width: 500px;
 }
