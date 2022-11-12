@@ -13,11 +13,20 @@ export default class Card {
         this.cardHeader = document.createElement("div");
         this.cardHeader.classList.add("cardHeader");
         // BTN COLOR
-        this.btnColors = document.createElement("div");
-        this.btnColors.classList.add("btnColors");
+        // this.btnColors = document.createElement("div");
+        // this.btnColors.classList.add("btnColors");
         //INPUT COLOR
         this.inputColors = document.createElement("input");
         this.inputColors.type = "color";
+        this.inputColors.classList.add("color_input");
+        this.inputColors.classList.add("btnColors");
+        this.inputColors.addEventListener("input", (e) => {
+            let observers = [this.inputColors, this.cardHeader, this.cardInputBtn];
+            let value = e.target.value;
+            observers.forEach((element) => {
+                element.style.backgroundColor = value;
+            });
+        });
         //CARD TITLE
         this.cardTitle = document.createElement("input");
         this.cardTitle.classList.add("cardTitleInput");
@@ -41,7 +50,7 @@ export default class Card {
         });
         // APPEND ELEMENTS TO CURRENT DIVS
         this.cardHeader.appendChild(this.cardTitle);
-        this.cardHeader.appendChild(this.btnColors);
+        this.cardHeader.appendChild(this.inputColors);
         this.cardDiv.appendChild(this.cardHeader);
         this.divUserInputs.appendChild(this.cardInputText);
         this.divUserInputs.appendChild(this.cardInputBtn);
