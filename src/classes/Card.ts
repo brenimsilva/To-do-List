@@ -1,11 +1,13 @@
 import ICard from "../interfaces/ICard";
+import ITaskManager from "../interfaces/ITaskManager";
 import Modal from "./Modal.js";
 import Task from "./Task.js";
+import TaskManager from "./TaskManager.js";
 import Util from "./Util.js";
 
-export default class Card implements ICard {
+export default class Card implements ICard, ITaskManager {
   private id: string;
-  private taskList: Array<Task> = [];
+  private taskManager: TaskManager;
   private cardDiv: HTMLDivElement;
   private containerDiv: HTMLDivElement;
   private cardHeader: HTMLDivElement;
@@ -17,6 +19,7 @@ export default class Card implements ICard {
   private divUserInputs: HTMLDivElement;
   constructor() {
     this.id = Util.generateID("C");
+    this.taskManager = new TaskManager();
     // CONTAINERS
     this.cardDiv = document.createElement("div");
     this.cardDiv.classList.add("todoCard");
@@ -84,12 +87,12 @@ export default class Card implements ICard {
     this.build();
   }
 
-  public addTask(): boolean {
+  addTask(): boolean {
     if (this.checkIfCanAddNewTask()) {
       try {
         const task = new Task();
 
-        task.getButton("trash").addEventListener("click", () => {
+        task.getButton("TRASH").addEventListener("click", () => {
           this.removeTask(task);
         });
 
@@ -98,7 +101,7 @@ export default class Card implements ICard {
         });
 
         task.getElement().innerText = this.cardInputText.value;
-        this.taskList.push(task);
+        this.taskManager.taskList.push(task);
         this.printAllTasks();
         this.cardInputText.value = "";
 
@@ -114,10 +117,35 @@ export default class Card implements ICard {
 
   removeTask(task: Task): boolean {
     try {
-      this.taskList = this.taskList.filter((element) => {
-        return element.id !== task.id;
-      });
+      this.taskManager.taskList = this.taskManager.taskList.filter(
+        (element) => {
+          return element.id !== task.id;
+        }
+      );
       this.printAllTasks();
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  editTask(task: Task, newValue: string): boolean {
+    try {
+      const itemBeingEditedIndex = this.taskManager.taskList.findIndex(
+        (element) => {
+          return element.id === task.id;
+        }
+      );
+      this.taskManager.taskList[itemBeingEditedIndex].setLiText(newValue);
+      this.printAllTasks();
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  completeTask(task: Task): boolean {
+    try {
       return true;
     } catch {
       return false;
@@ -129,20 +157,15 @@ export default class Card implements ICard {
       const modal = new Modal(task.getElement().innerText);
       document.body.appendChild(modal.container);
       modal.btnEdit.addEventListener("click", () => {
-        const itemBeingEditedIndex = this.taskList.findIndex((element) => {
-          return element.id === task.id;
-        });
-        this.taskList[itemBeingEditedIndex].setLiText(modal.htmlTitle.value);
+        this.editTask(task, modal.htmlTitle.value);
       });
-
-      this.printAllTasks();
       return true;
     } catch {
       return false;
     }
   }
 
-  private build(): boolean {
+  build(): boolean {
     try {
       document.querySelector(".grid")?.appendChild(this.cardDiv);
       document.querySelector(".todoNewCard")?.before(this.cardDiv);
@@ -153,20 +176,20 @@ export default class Card implements ICard {
     }
   }
 
-  private checkIfCanAddNewTask(): boolean {
+  checkIfCanAddNewTask(): boolean {
     if (!this.cardInputText.value) {
       return false;
-    } else if (this.taskList.length > 5) {
+    } else if (this.taskManager.taskList.length > 5) {
       return false;
     } else {
       return true;
     }
   }
 
-  private printAllTasks() {
+  printAllTasks() {
     this.cardUl.innerHTML = "";
-    for (let index = 0; index < this.taskList.length; index++) {
-      this.cardUl.appendChild(this.taskList[index].getDiv());
+    for (let index = 0; index < this.taskManager.taskList.length; index++) {
+      this.cardUl.appendChild(this.taskManager.taskList[index].getDiv());
     }
   }
 }

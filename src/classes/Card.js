@@ -1,10 +1,11 @@
 import Modal from "./Modal.js";
 import Task from "./Task.js";
+import TaskManager from "./TaskManager.js";
 import Util from "./Util.js";
 export default class Card {
     constructor() {
-        this.taskList = [];
         this.id = Util.generateID("C");
+        this.taskManager = new TaskManager();
         // CONTAINERS
         this.cardDiv = document.createElement("div");
         this.cardDiv.classList.add("todoCard");
@@ -65,14 +66,14 @@ export default class Card {
         if (this.checkIfCanAddNewTask()) {
             try {
                 const task = new Task();
-                task.getButton("trash").addEventListener("click", () => {
+                task.getButton("TRASH").addEventListener("click", () => {
                     this.removeTask(task);
                 });
                 task.getButton("EDIT").addEventListener("click", () => {
                     this.showEditTaskModal(task);
                 });
                 task.getElement().innerText = this.cardInputText.value;
-                this.taskList.push(task);
+                this.taskManager.taskList.push(task);
                 this.printAllTasks();
                 this.cardInputText.value = "";
                 return true;
@@ -88,10 +89,31 @@ export default class Card {
     }
     removeTask(task) {
         try {
-            this.taskList = this.taskList.filter((element) => {
+            this.taskManager.taskList = this.taskManager.taskList.filter((element) => {
                 return element.id !== task.id;
             });
             this.printAllTasks();
+            return true;
+        }
+        catch (_a) {
+            return false;
+        }
+    }
+    editTask(task, newValue) {
+        try {
+            const itemBeingEditedIndex = this.taskManager.taskList.findIndex((element) => {
+                return element.id === task.id;
+            });
+            this.taskManager.taskList[itemBeingEditedIndex].setLiText(newValue);
+            this.printAllTasks();
+            return true;
+        }
+        catch (_a) {
+            return false;
+        }
+    }
+    completeTask(task) {
+        try {
             return true;
         }
         catch (_a) {
@@ -103,12 +125,8 @@ export default class Card {
             const modal = new Modal(task.getElement().innerText);
             document.body.appendChild(modal.container);
             modal.btnEdit.addEventListener("click", () => {
-                const itemBeingEditedIndex = this.taskList.findIndex((element) => {
-                    return element.id === task.id;
-                });
-                this.taskList[itemBeingEditedIndex].setLiText(modal.htmlTitle.value);
+                this.editTask(task, modal.htmlTitle.value);
             });
-            this.printAllTasks();
             return true;
         }
         catch (_a) {
@@ -131,7 +149,7 @@ export default class Card {
         if (!this.cardInputText.value) {
             return false;
         }
-        else if (this.taskList.length > 5) {
+        else if (this.taskManager.taskList.length > 5) {
             return false;
         }
         else {
@@ -140,8 +158,8 @@ export default class Card {
     }
     printAllTasks() {
         this.cardUl.innerHTML = "";
-        for (let index = 0; index < this.taskList.length; index++) {
-            this.cardUl.appendChild(this.taskList[index].getDiv());
+        for (let index = 0; index < this.taskManager.taskList.length; index++) {
+            this.cardUl.appendChild(this.taskManager.taskList[index].getDiv());
         }
     }
 }
